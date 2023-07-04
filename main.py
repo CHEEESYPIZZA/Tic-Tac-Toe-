@@ -50,9 +50,7 @@ def selectPlayers():
 def playerMove(letter):
     run = True
     while run:
-        move = input(
-            f"Player '{letter}', please select a position to place your letter (1-9): "
-        )
+        move = input(f"Please select a position to place an '{letter}' (1-9): ")
         try:
             move = int(move)
             if move > 0 and move < 10:
@@ -124,30 +122,49 @@ def main():
 
     player_mode = selectPlayers()
 
-    while not (isBoardFull(board)):
+    while not isBoardFull(board):
         if player_mode == "2":  # Human vs. Human
-            if not (isWinner(board, "O")):
+            if not isWinner(board, "O") and not isWinner(board, "X"):
+                if isBoardFull(board):
+                    print("Tie Game!")
+                    break
+
                 playerMove("X")
                 printBoard(board)
-            else:
-                print("Sorry, O's won this time!")
-                break
 
-            if not (isWinner(board, "X")):
+                if isWinner(board, "X"):
+                    print("Player X wins!")
+                    break
+
+                if isBoardFull(board):
+                    print("Tie Game!")
+                    break
+
                 playerMove("O")
                 printBoard(board)
+
+                if isWinner(board, "O"):
+                    print("Player O wins!")
+                    break
+
             else:
-                print("X's won this time! Good Job!")
+                if isWinner(board, "O"):
+                    print("Player O wins!")
+                else:
+                    print("Player X wins!")
                 break
         else:  # Human vs. Computer
-            if not (isWinner(board, "O")):
+            if not isWinner(board, "O") and not isWinner(board, "X"):
                 playerMove("X")
                 printBoard(board)
             else:
-                print("Sorry, O's won this time!")
+                if isWinner(board, "O"):
+                    print("Computer wins!")
+                else:
+                    print("You win!")
                 break
 
-            if not (isWinner(board, "X")):
+            if not isBoardFull(board):
                 move = compMove()
                 if move == 0:
                     print("Tie Game!")
@@ -156,10 +173,10 @@ def main():
                     print("Computer placed an 'O' in position", move, ":")
                     printBoard(board)
             else:
-                print("X's won this time! Good Job!")
+                print("Tie Game!")
                 break
 
-    if isBoardFull(board):
+    if isBoardFull(board) and not isWinner(board, "O") and not isWinner(board, "X"):
         print("Tie Game!")
 
 
@@ -171,3 +188,4 @@ while True:
         main()
     else:
         break
+
